@@ -10,8 +10,8 @@ def main(_):
         model = AdvCrossModalSimple(model_params)
     with tf.Session(graph=graph) as sess:
         model.train(sess)
-        #model.eval_random_rank()
-       # model.eval(sess)
+        model.eval_random_rank()
+        model.eval(sess)
 
 
 if __name__ == '__main__':
