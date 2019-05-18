@@ -332,7 +332,7 @@ class AdvCrossModalSimple(BaseModel):
         #with open('./data/wikipedia_dataset/test_labels.pkl', 'rb') as fpkl:
         #    test_labels = pickle.load(fpkl)
         with open('./data/wiki_shallow/L_te.pkl', 'rb') as fpkl:
-            test_labels = pickle.load(fpkl)
+            test_labels = pickle.load(fpkl, encoding='latin1')
         k = self.model_params.top_k
         avg_precs = []
         for i in range(len(test_labels)):
@@ -469,13 +469,13 @@ class AdvCrossModalSimple(BaseModel):
         #with open('./data/wikipedia_dataset/test_img_files.pkl', 'rb') as f:
         #    test_img_names = pickle.load(f)   
         with open('./data/wikipedia_dataset/text_words_map.pkl', 'rb') as f:
-            txt_words = pickle.load(f)
+            txt_words = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/test_img_words.pkl', 'rb') as f:
-            img_words = pickle.load(f)
+            img_words = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/test_txt_files.pkl', 'rb') as f:
-            test_txt_names = pickle.load(f)
+            test_txt_names = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/test_img_files.pkl', 'rb') as f:
-            test_img_names = pickle.load(f)                                                    
+            test_img_names = pickle.load(f, encoding='latin1')                                                    
          # Precision-scope for text query
         scope = 100
         retrieval_results = []

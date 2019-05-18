@@ -5,9 +5,9 @@ import tensorflow as tf
 import tensorflow.contrib.slim as slim
 from random import shuffle
 import sklearn.preprocessing
-from base_model import BaseModel, BaseModelParams, BaseDataIter
+from models.base_model import BaseModel, BaseModelParams, BaseDataIter
 import utils
-from flip_gradient import flip_gradient
+from models.flip_gradient import flip_gradient
 from sklearn.metrics.pairwise import cosine_similarity
 
 class DataIter(BaseDataIter):
@@ -17,21 +17,21 @@ class DataIter(BaseDataIter):
         self.num_test_batch = 0
 
         with open('./data/wikipedia_dataset/train_img_feats.pkl', 'rb') as f:
-            self.train_img_feats = pickle.load(f)
+            self.train_img_feats = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/train_txt_vecs.pkl', 'rb') as f:
-            self.train_txt_vecs = pickle.load(f)
+            self.train_txt_vecs = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/train_labels.pkl', 'rb') as f:
-            self.train_labels = pickle.load(f)
+            self.train_labels = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/test_img_feats.pkl', 'rb') as f:
-            self.test_img_feats = pickle.load(f)
+            self.test_img_feats = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/test_txt_vecs.pkl', 'rb') as f:
-            self.test_txt_vecs = pickle.load(f)
+            self.test_txt_vecs = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/test_labels.pkl', 'rb') as f:
-            self.test_labels = pickle.load(f)
+            self.test_labels = pickle.load(f, encoding='latin1')
         
    
-        self.num_train_batch = len(self.train_img_feats) / self.batch_size
-        self.num_test_batch = len(self.test_img_feats) / self.batch_size
+        self.num_train_batch = len(self.train_img_feats) // self.batch_size
+        self.num_test_batch = len(self.test_img_feats) // self.batch_size
 
     def train_data(self):
         for i in range(self.num_train_batch):
@@ -153,8 +153,8 @@ class AdvCrossModalSimple(BaseModel):
     def domain_classifier(self, E, l, is_training=True, reuse=False):
         with slim.arg_scope([slim.fully_connected], activation_fn=None, reuse=reuse):
             E = flip_gradient(E, l)
-            net = slim.fully_connected(E, self.model_params.semantic_emb_dim/2, scope='dc_fc_0')
-            net = slim.fully_connected(net, self.model_params.semantic_emb_dim/4, scope='dc_fc_1')
+            net = slim.fully_connected(E, self.model_params.semantic_emb_dim//2, scope='dc_fc_0')
+            net = slim.fully_connected(net, self.model_params.semantic_emb_dim//4, scope='dc_fc_1')
             net = slim.fully_connected(net, 2, scope='dc_fc_2')
         return net
 
@@ -293,7 +293,7 @@ class AdvCrossModalSimple(BaseModel):
         top_k = self.model_params.top_k
         avg_precs = []
         all_precs = []
-        for k in top_k:
+        for k in range(top_k):
             for i in range(len(test_txt_vecs_trans)):
                 query_label = test_labels[i]
 
@@ -376,13 +376,13 @@ class AdvCrossModalSimple(BaseModel):
         #with open('./data/wikipedia_dataset/test_img_files.pkl', 'rb') as f:
         #    test_img_names = pickle.load(f)   
         with open('./data/wikipedia_dataset/text_words_map.pkl', 'rb') as f:
-            txt_words = pickle.load(f)
+            txt_words = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/test_img_words.pkl', 'rb') as f:
-            img_words = pickle.load(f)
+            img_words = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/test_txt_files.pkl', 'rb') as f:
-            test_txt_names = pickle.load(f)
+            test_txt_names = pickle.load(f, encoding='latin1')
         with open('./data/wikipedia_dataset/test_img_files.pkl', 'rb') as f:
-            test_img_names = pickle.load(f)                                                    
+            test_img_names = pickle.load(f, encoding='latin1')                                                    
          # Precision-scope for text query
         scope = 100
         retrieval_results = []
